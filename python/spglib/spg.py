@@ -33,6 +33,13 @@ __all__ = [
 ]
 
 
+def _validate_symprec(symprec: float) -> float:
+    value = float(symprec)
+    if not np.isfinite(value) or value <= 0:
+        raise ValueError("symprec must be a finite positive number")
+    return value
+
+
 SpgCell: TypeAlias = tuple[Lattice, Positions, Numbers]
 """
 Crystal structure represented by a tuple of (:py:type:`spglib.utils.Lattice`,
@@ -435,6 +442,7 @@ def get_symmetry_dataset(
 
     """
     _set_no_error(_throw)
+    symprec = _validate_symprec(symprec)
 
     lattice, positions, numbers, _ = _expand_cell(cell)
 
