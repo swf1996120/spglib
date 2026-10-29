@@ -130,8 +130,14 @@ def _expand_cell(
         lattice = np.array(np.transpose(cell[0]), dtype="double", order="C")
         positions = np.array(cell[1], dtype="double", order="C")
         raw_numbers = np.asarray(cell[2])
-        if raw_numbers.ndim != 1 or not np.issubdtype(raw_numbers.dtype, np.integer):
-            if not np.issubdtype(raw_numbers.dtype, np.number) or not np.isfinite(raw_numbers).all() or not np.equal(raw_numbers, np.floor(raw_numbers)).all():
+        if raw_numbers.ndim != 1:
+            raise TypeError("numbers has to be a (num_atoms,) array.")
+        if not np.issubdtype(raw_numbers.dtype, np.integer):
+            if (
+                not np.issubdtype(raw_numbers.dtype, np.number)
+                or not np.isfinite(raw_numbers).all()
+                or not np.equal(raw_numbers, np.floor(raw_numbers)).all()
+            ):
                 raise TypeError("numbers has to contain integer species labels")
         numbers = np.array(raw_numbers, dtype="intc")
         if len(cell) == 4:
