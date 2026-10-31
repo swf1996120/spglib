@@ -127,25 +127,20 @@ def _expand_cell(
     cell: Cell,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray | None]:
     try:
+        if len(cell) not in (3, 4):
+            raise TypeError("cell has to be a tuple of 3 or 4 elements.")
         lattice = np.array(np.transpose(cell[0]), dtype="double", order="C")
         positions = np.array(cell[1], dtype="double", order="C")
         raw_numbers = np.asarray(cell[2])
         if raw_numbers.ndim != 1:
             raise TypeError("numbers has to be a (num_atoms,) array.")
         if not np.issubdtype(raw_numbers.dtype, np.integer):
-            if (
-                not np.issubdtype(raw_numbers.dtype, np.number)
-                or not np.isfinite(raw_numbers).all()
-                or not np.equal(raw_numbers, np.floor(raw_numbers)).all()
-            ):
-                raise TypeError("numbers has to contain integer species labels")
+            raise TypeError("numbers has to be an array-like of integers.")
         numbers = np.array(raw_numbers, dtype="intc")
         if len(cell) == 4:
             magmoms = np.array(cell[3], order="C", dtype="double")
-        elif len(cell) == 3:
-            magmoms = None
         else:
-            raise TypeError("cell has to be a tuple of 3 or 4 elements.")
+            magmoms = None
 
         # Sanity check
         if lattice.shape != (3, 3):

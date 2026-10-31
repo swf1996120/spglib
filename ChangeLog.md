@@ -11,6 +11,11 @@ GitHub release pages and in the git history.
 
 ## [Unreleased]
 
+### Python API
+
+- Reject `numbers` inputs that are not one-dimensional array-likes of integers,
+  including integer-valued floating-point arrays, before conversion to C integers.
+
 ## v2.8.0 (3 Oct. 2026)
 
 ### Python support
